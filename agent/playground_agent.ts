@@ -6,12 +6,15 @@ import {
   WorkerOptions,
   cli,
   defineAgent,
+  type llm,
   multimodal,
 } from "@livekit/agents";
 import * as openai from "@livekit/agents-plugin-openai";
 import type { Participant } from "@livekit/rtc-node";
 import { RemoteParticipant, type RpcInvocationData } from "@livekit/rtc-node";
 import { fileURLToPath } from "node:url";
+import { translate } from "@vitalets/google-translate-api";
+import { z } from "zod";
 
 function safeLogConfig(config: SessionConfig): string {
   const safeConfig = { ...config, openaiApiKey: "[REDACTED]" };
@@ -125,7 +128,35 @@ async function runMultimodalAgent(
     turnDetection: config.turnDetection,
   });
 
-  const agent = new multimodal.MultimodalAgent({ model });
+  const fncCtx: llm.FunctionContext = {
+    weather: {
+      description: "Get the weather in a location",
+      parameters: z.object({
+        location: z.string().describe("The location to get the weather for"),
+      }),
+      execute: async ({ location }) => {
+        console.debug(`executing weather function for ${location}`);
+        const translatedLocation = await translate(location, { to: "en" });
+        const englishLocation = translatedLocation.text;
+        const response = await fetch(
+          `https://api.weatherapi.com/v1/current.json?key=ef2e221b262246c995514235241901&q=${encodeURIComponent(
+            englishLocation,
+          )}&aqi=no`,
+        );
+        console.debug(`response is ${response}`);
+        if (!response.ok) {
+          throw new Error(`Weather API returned status: ${response.status}`);
+        }
+        const weather = await response.text();
+        return `The weather in ${location} right now is ${weather}.`;
+      },
+    },
+  };
+
+  const agent = new multimodal.MultimodalAgent({
+    model,
+    fncCtx,
+  });
   const session = (await agent.start(
     ctx.room,
   )) as openai.realtime.RealtimeSession;
