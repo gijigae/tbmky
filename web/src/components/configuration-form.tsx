@@ -24,6 +24,7 @@ import { RotateCcw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { ModalitiesId } from "@/data/modalities";
 import { TranscriptionModelId } from "@/data/transcription-models";
+
 export const ConfigurationFormSchema = z.object({
   model: z.nativeEnum(ModelId),
   transcriptionModel: z.nativeEnum(TranscriptionModelId),
@@ -35,6 +36,7 @@ export const ConfigurationFormSchema = z.object({
   vadThreshold: z.number().min(0).max(1),
   vadSilenceDurationMs: z.number().min(0).max(5000),
   vadPrefixPaddingMs: z.number().min(0).max(5000),
+  enable_function_calling: z.boolean(),
 });
 
 export interface ConfigurationFormFieldProps {
