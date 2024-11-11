@@ -1,15 +1,8 @@
 import { SessionConfig, defaultSessionConfig } from "./playground-state";
-import { VoiceId } from "./voices";
 import {
   Bot,
   GraduationCap,
-  Annoyed,
-  Music,
-  Cigarette,
-  Anchor,
-  Meh,
   HeadsetIcon,
-  Gamepad,
   Sparkles,
   TreePalm,
 } from "lucide-react";
