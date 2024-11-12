@@ -1,0 +1,30 @@
+{
+    "family": "livekit-agent-task",
+    "executionRoleArn": "arn:aws:iam::905418041924:role/ecsTaskExecutionRole",
+    "containerDefinitions": [
+      {
+        "name": "livekit-agent",
+        "image": "905418041924.dkr.ecr.ap-northeast-1.amazonaws.com/livekit-agent:latest",
+        "cpu": 2048,
+        "memory": 4096,
+        "essential": true,
+        "environment": [
+          { "name": "LIVEKIT_URL", "value": "wss://choimirai-p23chy4l.livekit.cloud" },
+          { "name": "LIVEKIT_API_KEY", "value": "APIVwuVtcQPvXa9" },
+          { "name": "LIVEKIT_API_SECRET", "value": "JCKZg173iAoZLTDMR7oRMJKIs42Lnaea8o482NZdKmM" },
+          { "name": "OPENAI_API_KEY", "value": "OPENAI_API_KEY" }
+        ],
+        "portMappings": [
+          {
+            "containerPort": 8081,
+            "hostPort": 8081,
+            "protocol": "tcp"
+          }
+        ]
+      }
+    ],
+    "requiresCompatibilities": ["FARGATE"],
+    "networkMode": "awsvpc",
+    "cpu": "2048",
+    "memory": "4096"
+  }
