@@ -116,7 +116,7 @@ export function SessionControls() {
         </DropdownMenu>
       </div>
       <Button variant="destructive" onClick={disconnect}>
-        Disconnect
+        TBM-KYの終了
       </Button>
     </div>
   );

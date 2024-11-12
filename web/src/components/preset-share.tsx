@@ -1,6 +1,6 @@
 "use client";
 
-import { Copy, Share } from "lucide-react";
+import { Copy } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,6 @@ import { Label } from "@/components/ui/label";
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger,
 } from "@/components/ui/popover";
 import { usePlaygroundState } from "@/hooks/use-playground-state";
 import { playgroundStateHelpers } from "@/lib/playground-state-helpers";
@@ -38,12 +37,6 @@ export function PresetShare() {
 
   return (
     <Popover>
-      <PopoverTrigger asChild>
-        <Button variant="secondary" className="text-sm font-semibold">
-          <Share className="h-4 w-4" />
-          <span className="ml-2 hidden md:block">Share</span>
-        </Button>
-      </PopoverTrigger>
       <PopoverContent align="end" className="w-[520px]">
         <div className="flex flex-col space-y-2 text-center sm:text-left">
           <h3 className="text-lg font-semibold">Share Preset</h3>

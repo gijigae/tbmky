@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Rocket, ArrowUpRight } from "lucide-react";
+import { Building, User, Mail, MessageSquare, Send } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -10,106 +10,68 @@ import {
 } from "@/components/ui/dialog";
 import { useState } from "react";
 import { usePlaygroundState } from "@/hooks/use-playground-state";
-import SyntaxHighlighter from "react-syntax-highlighter";
-import { atomOneDark as theme } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+
+type FeedbackForm = {
+  companyName: string;
+  userName: string;
+  email: string;
+  comment: string;
+};
 
 export function CodeViewer() {
   const [copied, setCopied] = useState(false);
   const [language, setLanguage] = useState<"python" | "typescript">("python");
   const { pgState } = usePlaygroundState();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [feedbackForm, setFeedbackForm] = useState<FeedbackForm>({
+    companyName: '',
+    userName: '',
+    email: '',
+    comment: ''
+  });
+  const { toast } = useToast();
 
-  const formatInstructions = (
-    instructions: string,
-    maxLineLength: number = 80,
-  ): string => {
-    return instructions
-      .split(/\s+/)
-      .reduce(
-        (lines, word) => {
-          if ((lines[lines.length - 1] + " " + word).length <= maxLineLength) {
-            lines[lines.length - 1] +=
-              (lines[lines.length - 1] ? " " : "") + word;
-          } else {
-            lines.push(word);
-          }
-          return lines;
+  const handleSubmitFeedback = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('/api/feedback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-        [""],
-      )
-      .join("\n");
-  };
+        body: JSON.stringify(feedbackForm),
+      });
 
-  const pythonCode = `from livekit.agents import AutoSubscribe, JobContext, WorkerOptions, WorkerType, cli, multimodal
-from livekit.plugins import openai
+      if (!response.ok) {
+        throw new Error('Failed to submit feedback');
+      }
 
-async def entrypoint(ctx: JobContext):
-    await ctx.connect(auto_subscribe=AutoSubscribe.AUDIO_ONLY)
-
-    agent = multimodal.MultimodalAgent(
-        model=openai.realtime.RealtimeModel(
-            instructions="""${formatInstructions(pgState.instructions.replace(/"/g, '\\"'))}""",
-            voice="${pgState.sessionConfig.voice}",
-            temperature=${pgState.sessionConfig.temperature},
-            max_response_output_tokens=${pgState.sessionConfig.maxOutputTokens === null ? '"inf"' : pgState.sessionConfig.maxOutputTokens},
-            modalities=${pgState.sessionConfig.modalities == "text_and_audio" ? '["text", "audio"]' : '["text"]'},
-            turn_detection=openai.realtime.ServerVadOptions(
-                threshold=${pgState.sessionConfig.vadThreshold},
-                silence_duration_ms=${pgState.sessionConfig.vadSilenceDurationMs},
-                prefix_padding_ms=${pgState.sessionConfig.vadPrefixPaddingMs},
-            )
-        )
-    )
-    agent.start(ctx.room)
-
-
-if __name__ == "__main__":
-    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint, worker_type=WorkerType.ROOM))
-`;
-
-  const typescriptCode = `import { JobContext, WorkerOptions, cli, defineAgent, multimodal } from '@livekit/agents';
-import * as openai from '@livekit/agents-plugin-openai';
-import { JobType } from '@livekit/protocol';
-import { fileURLToPath } from 'node:url';
-
-export default defineAgent({
-  entry: async (ctx: JobContext) => {
-    await ctx.connect();
-
-    const agent = new multimodal.MultimodalAgent({
-      model: new openai.realtime.RealtimeModel({
-        instructions: \`${formatInstructions(pgState.instructions)}\`,
-        voice: '${pgState.sessionConfig.voice}',
-        temperature: ${pgState.sessionConfig.temperature},
-        maxResponseOutputTokens: ${pgState.sessionConfig.maxOutputTokens === null ? Infinity : pgState.sessionConfig.maxOutputTokens},
-        modalities: ${pgState.sessionConfig.modalities === "text_and_audio" ? "['text', 'audio']" : "['text']"},
-        turnDetection: {
-          type: 'server_vad',
-          threshold: ${pgState.sessionConfig.vadThreshold},
-          silence_duration_ms: ${pgState.sessionConfig.vadSilenceDurationMs},
-          prefix_padding_ms: ${pgState.sessionConfig.vadPrefixPaddingMs},
-        },
-      }),
-    });
-
-    await agent.start(ctx.room)
-  },
-});
-
-cli.runApp(new WorkerOptions({ agent: fileURLToPath(import.meta.url), workerType: JobType.JT_ROOM }));
-`;
-
-  const codeString = language === "python" ? pythonCode : typescriptCode;
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(codeString);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  const getDocsLink = () => {
-    return language === "python"
-      ? "https://github.com/livekit/agents"
-      : "https://github.com/livekit/agents-js";
+      toast({
+        title: "問い合わせが送信されました",
+        description: "お問い合わせ有難うございます。",
+        variant: "success",
+      });
+      setFeedbackForm({
+        companyName: '',
+        userName: '',
+        email: '',
+        comment: ''
+      });
+    } catch (error) {
+      toast({
+        title: "エラー",
+        description: "問い合わせを送信できませんでした。",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -117,69 +79,85 @@ cli.runApp(new WorkerOptions({ agent: fileURLToPath(import.meta.url), workerType
       <DialogTrigger asChild>
         <Button
           variant="default"
-          className="group relative transition-all duration-300 ease-in-out transform hover:scale-105 text-sm font-semibold"
+          className="group relative transition-all duration-300 ease-in-out transform hover:scale-105 text-sm font-semibold bg-[#0EA37F] hover:bg-[#0c8c6a] text-white"
         >
-          <Rocket className="h-5 w-5" />
-          <span className="sm:ml-2 hidden sm:block">Build with LiveKit</span>
-          <span className="ml-2 sm:hidden">Build</span>
+          <Mail className="h-5 w-5" />
+          <span className="sm:ml-2 hidden sm:block">安全なうに関する問い合わせ</span>
+          <span className="ml-2 sm:hidden">問い合わせ</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-6xl w-[95vw] flex flex-col mx-auto h-[90vh] max-h-[90vh]">
+      <DialogContent className="sm:max-w-md w-[95vw] bg-gradient-to-br from-[#e6f7f2] to-white">
         <DialogHeader>
-          <DialogTitle>
-            Build your own AI Agent with LiveKit &amp; OpenAI
-          </DialogTitle>
-          <DialogDescription>
-            Use the starter code below with{" "}
-            <a
-              className="underline"
-              href={getDocsLink()}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              LiveKit Agents
-            </a>{" "}
-            to get started with the OpenAI Realtime API.
+          <DialogTitle className="text-2xl font-bold text-[#0EA37F]">安全なうに関する問い合わせ</DialogTitle>
+          <DialogDescription className="text-gray-600">
+            安全なうについてのご意見やご要望をお聞かせください。
           </DialogDescription>
         </DialogHeader>
-        <div className="flex flex-col h-full overflow-hidden">
-          <div className="mb-4 flex-shrink-0">
-            <Button
-              variant={language === "python" ? "default" : "outline"}
-              onClick={() => setLanguage("python")}
-              className="mr-2"
-            >
-              Python
-            </Button>
-            <Button
-              variant={language === "typescript" ? "default" : "outline"}
-              onClick={() => setLanguage("typescript")}
-            >
-              Node.js
-            </Button>
-          </div>
-          <div className="rounded-md bg-[#282c34] p-6 overflow-auto relative group flex-grow min-h-0">
-            <Button
-              className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 hover:opacity-100 hover:bg-white hover:text-black bg-white text-black"
-              onClick={handleCopy}
-            >
-              {copied ? "Copied!" : "Copy"}
-            </Button>
-            <div className="h-full overflow-auto">
-              <SyntaxHighlighter language={language} style={theme}>
-                {codeString}
-              </SyntaxHighlighter>
+        <form onSubmit={handleSubmitFeedback} className="space-y-6">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="companyName" className="text-sm font-medium text-gray-700 flex items-center">
+                <Building className="w-4 h-4 mr-2 text-[#0EA37F]" />
+                会社名
+              </Label>
+              <Input
+                id="companyName"
+                value={feedbackForm.companyName}
+                onChange={(e) => setFeedbackForm(prev => ({ ...prev, companyName: e.target.value }))}
+                required
+                className="rounded-md border-gray-300 focus:border-[#0EA37F] focus:ring focus:ring-[#0EA37F] focus:ring-opacity-50"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="userName" className="text-sm font-medium text-gray-700 flex items-center">
+                <User className="w-4 h-4 mr-2 text-[#0EA37F]" />
+                お名前
+              </Label>
+              <Input
+                id="userName"
+                value={feedbackForm.userName}
+                onChange={(e) => setFeedbackForm(prev => ({ ...prev, userName: e.target.value }))}
+                required
+                className="rounded-md border-gray-300 focus:border-[#0EA37F] focus:ring focus:ring-[#0EA37F] focus:ring-opacity-50"
+              />
             </div>
           </div>
-          <div className="mt-4 flex justify-end flex-shrink-0">
-            <Button asChild variant="default">
-              <a href="https://docs.livekit.io/agents/openai" target="_blank">
-                <ArrowUpRight className="h-5 w-5 mr-2" />
-                Get building!
-              </a>
-            </Button>
+          <div className="space-y-2">
+            <Label htmlFor="email" className="text-sm font-medium text-gray-700 flex items-center">
+              <Mail className="w-4 h-4 mr-2 text-[#0EA37F]" />
+              会社のメールアドレス
+            </Label>
+            <Input
+              id="email"
+              type="email"
+              value={feedbackForm.email}
+              onChange={(e) => setFeedbackForm(prev => ({ ...prev, email: e.target.value }))}
+              required
+              className="rounded-md border-gray-300 focus:border-[#0EA37F] focus:ring focus:ring-[#0EA37F] focus:ring-opacity-50"
+            />
           </div>
-        </div>
+          <div className="space-y-2">
+            <Label htmlFor="comment" className="text-sm font-medium text-gray-700 flex items-center">
+              <MessageSquare className="w-4 h-4 mr-2 text-[#0EA37F]" />
+              ご意見やご要望
+            </Label>
+            <Textarea
+              id="comment"
+              value={feedbackForm.comment}
+              onChange={(e) => setFeedbackForm(prev => ({ ...prev, comment: e.target.value }))}
+              required
+              className="min-h-[100px] rounded-md border-gray-300 focus:border-[#0EA37F] focus:ring focus:ring-[#0EA37F] focus:ring-opacity-50"
+            />
+          </div>
+          <Button 
+            type="submit" 
+            disabled={isSubmitting}
+            className="w-full bg-[#0EA37F] hover:bg-[#0c8c6a] text-white font-semibold py-2 px-4 rounded-md transition duration-300 ease-in-out flex items-center justify-center"
+          >
+            <Send className="w-4 h-4 mr-2" />
+            {isSubmitting ? '送信中...' : '送信'}
+          </Button>
+        </form>
       </DialogContent>
     </Dialog>
   );

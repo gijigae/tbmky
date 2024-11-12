@@ -47,7 +47,7 @@ export function ConnectButton() {
         ) : (
           <>
             <Mic className="mr-2 h-4 w-4" />
-            Connect
+            TBM-KYの開始
           </>
         )}
       </Button>

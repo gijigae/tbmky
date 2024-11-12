@@ -11,15 +11,7 @@ export default function Dashboard() {
       <footer className="hidden md:flex md:items-center md:gap-2 md:justify-end font-mono uppercase text-right pt-1 pb-2 px-8 text-xs text-gray-600 w-full md:mx-auto">
         Built with
         <Heart />
-        in
-        <a
-          href="https://github.com/livekit/agents"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="underline"
-        >
-          Yokohama
-        </a>{" "}
+        in Yokohama {" "}
         • © 2024 Choimirai Company
       </footer>
     </div>
