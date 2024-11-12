@@ -12,9 +12,9 @@ export function Header() {
         <div className="flex flex-col mb-2 lg:mb-0">
           <div className="flex flex-row items-center justify-between">
             <div>
-              <h2 className="text-lg font-semibold">Realtime Playground</h2>
+              <h2 className="text-lg font-semibold">安全なう</h2>
               <p className="text-sm text-gray-500">
-                Try OpenAI&apos;s new Realtime API right from your browser.
+                AIを活用し「一緒に働く仲間の方々を災害から守る」仕組み
               </p>
             </div>
           </div>

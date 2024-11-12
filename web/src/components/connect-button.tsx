@@ -1,11 +1,10 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { useConnection } from "@/hooks/use-connection";
 import { Loader2, Mic } from "lucide-react";
 import { usePlaygroundState } from "@/hooks/use-playground-state";
-import { AuthDialog } from "./auth";
 
 export function ConnectButton() {
   const { connect, disconnect, shouldConnect } = useConnection();
@@ -18,11 +17,7 @@ export function ConnectButton() {
     if (shouldConnect) {
       await disconnect();
     } else {
-      if (!pgState.openaiAPIKey) {
-        setShowAuthDialog(true);
-      } else {
-        await initiateConnection();
-      }
+      await initiateConnection();
     }
   };
 
@@ -36,18 +31,6 @@ export function ConnectButton() {
       setConnecting(false);
     }
   }, [connect]);
-
-  const handleAuthComplete = () => {
-    setShowAuthDialog(false);
-    setInitiateConnectionFlag(true);
-  };
-
-  useEffect(() => {
-    if (initiateConnectionFlag && pgState.openaiAPIKey) {
-      initiateConnection();
-      setInitiateConnectionFlag(false);
-    }
-  }, [initiateConnectionFlag, initiateConnection, pgState.openaiAPIKey]);
 
   return (
     <>
@@ -68,11 +51,6 @@ export function ConnectButton() {
           </>
         )}
       </Button>
-      <AuthDialog
-        open={showAuthDialog}
-        onOpenChange={setShowAuthDialog}
-        onAuthComplete={handleAuthComplete}
-      />
     </>
   );
 }

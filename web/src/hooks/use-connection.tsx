@@ -5,7 +5,6 @@ import React, {
   useState,
   useCallback,
   useContext,
-  useEffect,
 } from "react";
 import { PlaygroundState } from "@/data/playground-state";
 import { usePlaygroundState } from "./use-playground-state";
@@ -42,9 +41,6 @@ export const ConnectionProvider = ({
   const { pgState, dispatch } = usePlaygroundState();
 
   const connect = async () => {
-    if (!pgState.openaiAPIKey) {
-      throw new Error("OpenAI API key is required to connect");
-    }
     const response = await fetch("/api/token", {
       method: "POST",
       headers: {
@@ -70,13 +66,6 @@ export const ConnectionProvider = ({
   const disconnect = useCallback(async () => {
     setConnectionDetails((prev) => ({ ...prev, shouldConnect: false }));
   }, []);
-
-  // Effect to handle API key changes
-  useEffect(() => {
-    if (pgState.openaiAPIKey === null && connectionDetails.shouldConnect) {
-      disconnect();
-    }
-  }, [pgState.openaiAPIKey, connectionDetails.shouldConnect, disconnect]);
 
   return (
     <ConnectionContext.Provider

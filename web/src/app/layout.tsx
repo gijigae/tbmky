@@ -17,7 +17,7 @@ const publicSans = Public_Sans({
 import "@livekit/components-styles";
 
 export const metadata: Metadata = {
-  title: "Realtime Playground",
+  title: "安全なう",
   description:
     "Try OpenAI's new Realtime API right from your browser. Built on LiveKit Agents.",
   openGraph: {
