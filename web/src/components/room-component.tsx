@@ -24,7 +24,7 @@ export function RoomComponent() {
       token={token}
       connect={shouldConnect}
       audio={true}
-      className="flex flex-col md:grid md:grid-cols-[1fr_360px] lg:grid-cols-[300px_1fr_300px] xl:grid-cols-[360px_1fr_360px] flex-grow overflow-hidden border-l border-r border-b rounded-b-md"
+      className="flex flex-col md:grid md:grid-cols-[1fr_360px] flex-grow overflow-hidden border-l border-r border-b rounded-b-md"
       style={{ "--lk-bg": "white" } as React.CSSProperties}
       options={{
         publishDefaults: {
@@ -33,7 +33,7 @@ export function RoomComponent() {
       }}
     >
       <AgentProvider>
-        <div className="hidden lg:block h-full overflow-y-auto relative border-r">
+        <div className="hidden h-full overflow-y-auto relative border-r">
           <ConfigurationForm />
         </div>
         <div className="flex flex-col justify-center w-full max-w-3xl mx-auto">

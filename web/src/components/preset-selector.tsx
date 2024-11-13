@@ -119,7 +119,7 @@ export function PresetSelector(props: PopoverProps) {
           <Button
             variant="outline"
             role="combobox"
-            aria-label="Load…"
+            aria-label="業種"
             aria-expanded={open}
             className="flex-1 justify-between md:max-w-[200px] lg:max-w-[300px]"
           >
@@ -130,7 +130,7 @@ export function PresetSelector(props: PopoverProps) {
                   {selectedPreset?.icon && (
                     <selectedPreset.icon className="mr-2 h-4 w-4" />
                   )}
-                  <span>{selectedPreset?.name || "Load…"}</span>
+                  <span>{selectedPreset?.name || "業種"}</span>
                 </div>
               );
             })()}
@@ -139,77 +139,7 @@ export function PresetSelector(props: PopoverProps) {
         </PopoverTrigger>
         <PopoverContent className="w-[300px] p-0">
           <Command>
-            <CommandInput placeholder="Search…" />
             <CommandList className="max-h-[320px]">
-              {pgState.userPresets.length > 0 && (
-                <CommandGroup heading="Saved">
-                  {pgState.userPresets.map((preset: Preset) => (
-                    <CommandItem
-                      key={preset.id}
-                      value={preset.id}
-                      onSelect={() => handlePresetSelect(preset.id)}
-                    >
-                      <div className="flex items-center justify-between w-full">
-                        <HoverCard>
-                          <HoverCardTrigger asChild>
-                            <div className="flex items-center">
-                              {preset.icon && (
-                                <preset.icon className="mr-2 h-4 w-4" />
-                              )}
-                              <span>{preset.name}</span>
-                            </div>
-                          </HoverCardTrigger>
-                          <HoverCardContent
-                            className="w-80"
-                            side="bottom"
-                            align="start"
-                            alignOffset={20}
-                          >
-                            <p>{preset.description}</p>
-                          </HoverCardContent>
-                        </HoverCard>
-                        <div className="flex items-center space-x-2">
-                          <Check
-                            className={cn(
-                              "h-4 w-4",
-                              pgState.selectedPresetId === preset.id
-                                ? "opacity-100"
-                                : "opacity-0",
-                            )}
-                          />
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-6 w-6 p-0"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setPresetToDelete(preset);
-                              setShowDeleteDialog(true);
-                            }}
-                          >
-                            <Trash className="h-4 w-4 text-red-500 hover:text-red-700" />
-                          </Button>
-                        </div>
-                      </div>
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              )}
-
-              <CommandSeparator />
-
-              <CommandGroup>
-                <CommandItem
-                  value="blank"
-                  onSelect={() => handlePresetSelect(null)}
-                >
-                  <div className="flex items-center">
-                    <FileIcon className="mr-2 h-4 w-4" />
-                    <span>Start from scratch</span>
-                  </div>
-                </CommandItem>
-              </CommandGroup>
-
               {Object.values(PresetGroup).map((group) => (
                 <CommandGroup key={group} heading={group}>
                   <CommandEmpty>No examples found.</CommandEmpty>

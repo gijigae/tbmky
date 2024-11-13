@@ -15,6 +15,25 @@ import { ChatControls } from "@/components/chat-controls";
 import { useAgent } from "@/hooks/use-agent";
 import { useConnection } from "@/hooks/use-connection";
 import { toast } from "@/hooks/use-toast";
+import { Mic } from "lucide-react";
+
+function DisplayMessage() {
+  return (
+    <div className="flex flex-col items-center justify-center p-8 text-center space-y-6">
+      <div className="rounded-full bg-primary/10 p-6">
+        <Mic className="h-12 w-12 text-primary" />
+      </div>
+      <div className="space-y-2">
+        <h2 className="text-2xl font-semibold tracking-tight">
+          「安全なう」へようこそ
+        </h2>
+        <p className="text-xl text-muted-foreground">
+        TBY-KYの開始ボタンでTBM-KYを始めてください
+        </p>
+      </div>
+    </div>
+  );
+}
 
 export function Chat() {
   const connectionState = useConnectionState();
@@ -123,11 +142,11 @@ export function Chat() {
               {isChatRunning && !isEditingInstructions ? (
                 renderVisualizer()
               ) : (
-                <Instructions />
+                <DisplayMessage />
               )}
             </div>
             <div className="hidden lg:block w-full">
-              <Instructions />
+              <DisplayMessage />
             </div>
           </div>
           <div className="grow h-full flex items-center justify-center">
