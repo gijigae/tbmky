@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { CaretSortIcon, FileIcon } from "@radix-ui/react-icons";
+import { CaretSortIcon } from "@radix-ui/react-icons";
 import { Check } from "lucide-react";
 import { PopoverProps } from "@radix-ui/react-popover";
 import { toast } from "@/hooks/use-toast";
