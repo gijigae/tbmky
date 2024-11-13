@@ -27,11 +27,11 @@ function DisplayMessage() {
           「安全なう」へようこそ
         </h2>
         <p className="text-xl text-muted-foreground">
-          下記のボタンでTBM-KYを始めてください
+          該当業種を選んで始めてください
           <br />
           <span className="inline-flex items-center gap-2">
             <Calendar className="h-5 w-5" />
-            デモ版の日程：本日12時半から14時迄
+            日程：12時半から14時迄利用可
           </span>
         </p>
       </div>
