@@ -14,7 +14,7 @@ import { ChatControls } from "@/components/chat-controls";
 import { useAgent } from "@/hooks/use-agent";
 import { useConnection } from "@/hooks/use-connection";
 import { toast } from "@/hooks/use-toast";
-import { Mic } from "lucide-react";
+import { Mic, Calendar } from "lucide-react";
 
 function DisplayMessage() {
   return (
@@ -27,7 +27,12 @@ function DisplayMessage() {
           「安全なう」へようこそ
         </h2>
         <p className="text-xl text-muted-foreground">
-        TBY-KYの開始ボタンでTBM-KYを始めてください
+          下記のボタンでTBM-KYを始めてください
+          <br />
+          <span className="inline-flex items-center gap-2">
+            <Calendar className="h-5 w-5" />
+            デモ版の日程：本日12時半から14時迄
+          </span>
         </p>
       </div>
     </div>
