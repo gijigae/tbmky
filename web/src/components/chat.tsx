@@ -27,11 +27,11 @@ function DisplayMessage() {
           「安全なう」へようこそ
         </h2>
         <p className="text-xl text-muted-foreground">
-          該当業種を選んで始めてください
+          該当業種を選んでスタート
           <br />
           <span className="inline-flex items-center gap-2">
             <Calendar className="h-5 w-5" />
-            日程：12時半から14時迄利用可
+            利用時間：12時半から14時迄
           </span>
         </p>
       </div>
