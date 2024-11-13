@@ -17,33 +17,22 @@ export function Transcript({
     return scrollHeight - scrollTop - clientHeight;
   };
 
-  const handleScrollVisibility = (
-    container: HTMLElement,
-    scrollButton: HTMLButtonElement,
-  ) => {
-    const distanceFromBottom = calculateDistanceFromBottom(container);
-    const shouldShowButton = distanceFromBottom > 100;
-    setShowScrollButton(shouldShowButton);
-    scrollButton.style.display = shouldShowButton ? "flex" : "none";
-  };
-
   useEffect(() => {
     const container = scrollContainerRef.current;
     const scrollButton = scrollButtonRef.current;
     if (container && scrollButton) {
-      const handleScroll = () =>
-        handleScrollVisibility(container, scrollButton);
+      const handleScrollVisibility = () => {
+        const distanceFromBottom = calculateDistanceFromBottom(container);
+        const shouldShowButton = distanceFromBottom > 100;
+        setShowScrollButton(shouldShowButton);
+        scrollButton.style.display = shouldShowButton ? "flex" : "none";
+      };
 
-      handleScroll(); // Check initial state
-      container.addEventListener("scroll", handleScroll);
-      return () => container.removeEventListener("scroll", handleScroll);
+      handleScrollVisibility(); // Check initial state
+      container.addEventListener("scroll", handleScrollVisibility);
+      return () => container.removeEventListener("scroll", handleScrollVisibility);
     }
-  }, [
-    scrollContainerRef,
-    scrollButtonRef,
-    displayTranscriptions,
-    handleScrollVisibility,
-  ]);
+  }, [scrollContainerRef, scrollButtonRef]);
 
   useEffect(() => {
     const container = scrollContainerRef.current;

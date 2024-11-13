@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { CaretSortIcon, FileIcon } from "@radix-ui/react-icons";
-import { Check, Trash } from "lucide-react";
+import { Check } from "lucide-react";
 import { PopoverProps } from "@radix-ui/react-popover";
 import { toast } from "@/hooks/use-toast";
 import {
@@ -21,10 +21,8 @@ import {
   Command,
   CommandEmpty,
   CommandGroup,
-  CommandInput,
   CommandItem,
   CommandList,
-  CommandSeparator,
 } from "@/components/ui/command";
 import {
   Popover,
