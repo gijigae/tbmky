@@ -20,7 +20,7 @@ export async function POST(request: Request) {
   const apiKey = process.env.LIVEKIT_API_KEY;
   const apiSecret = process.env.LIVEKIT_API_SECRET;
   const openaiAPIKey = process.env.OPENAI_API_KEY;
-  console.log("OpenAI API Key (first 10 chars):", openaiAPIKey?.substring(0, 10));
+  
   if (!apiKey || !apiSecret || !openaiAPIKey) {
     throw new Error("LIVEKIT_API_KEY and LIVEKIT_API_SECRET and OPENAI_API_KEY must be set");
   }
