@@ -14,7 +14,7 @@ import { ChatControls } from "@/components/chat-controls";
 import { useAgent } from "@/hooks/use-agent";
 import { useConnection } from "@/hooks/use-connection";
 import { toast } from "@/hooks/use-toast";
-import { Mic, Calendar } from "lucide-react";
+import { Mic } from "lucide-react";
 
 function DisplayMessage() {
   return (
