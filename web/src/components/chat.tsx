@@ -27,11 +27,13 @@ function DisplayMessage() {
           「安全なう」へようこそ
         </h2>
         <p className="text-xl text-muted-foreground">
-          該当業種を選んでスタート
+          デモ版は終了しました
+          <br />
           <br />
           <span className="inline-flex items-center gap-2">
-            <Calendar className="h-5 w-5" />
-            利用時間：12時半から14時迄
+            導入をご検討の方は
+            <br />
+            問い合わせからどうぞ
           </span>
         </p>
       </div>
