@@ -36,7 +36,7 @@ export function ConnectButton() {
     <>
       <Button
         onClick={handleConnectionToggle}
-        disabled={connecting || shouldConnect}
+        disabled={true}
         className="text-sm font-semibold bg-oai-green"
       >
         {connecting || shouldConnect ? (
